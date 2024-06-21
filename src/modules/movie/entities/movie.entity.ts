@@ -7,8 +7,7 @@ export class Movie {
   releaseDate: Date;
   adult: boolean;
   language: Language;
-  genre: Genre;
-  duration: number;
+  genre: Genre[];
   rating: number;
   ratingCount: number;
   createdAt: Date;
@@ -25,27 +24,26 @@ export enum Language {
   RU = 'RU',
   PT = 'PT',
   JA = 'JA',
+  KO = 'KO',
 }
 
 export enum Genre {
-  ACTION = 'ACTION',
-  COMEDY = 'COMEDY',
-  DRAMA = 'DRAMA',
-  HORROR = 'HORROR',
-  ROMANCE = 'ROMANCE',
-  THRILLER = 'THRILLER',
-  SCIFI = 'SCIFI',
-  FANTASY = 'FANTASY',
-  ANIMATION = 'ANIMATION',
-  DOCUMENTARY = 'DOCUMENTARY',
-  CRIME = 'CRIME',
-  MYSTERY = 'MYSTERY',
-  ADVENTURE = 'ADVENTURE',
-  FAMILY = 'FAMILY',
-  HISTORY = 'HISTORY',
-  WAR = 'WAR',
-  WESTERN = 'WESTERN',
-  MUSIC = 'MUSIC',
-  SPORT = 'SPORT',
-  BIOGRAPHY = 'BIOGRAPHY',
+  ACTION = 'ACTION', //28
+  COMEDY = 'COMEDY', //35
+  DRAMA = 'DRAMA', //18
+  HORROR = 'HORROR', //27
+  ROMANCE = 'ROMANCE', //10749
+  THRILLER = 'THRILLER', //53
+  SCIFI = 'SCIFI', //878
+  FANTASY = 'FANTASY', //14
+  ANIMATION = 'ANIMATION', //16
+  DOCUMENTARY = 'DOCUMENTARY', //99
+  CRIME = 'CRIME', //80
+  MYSTERY = 'MYSTERY', //9648
+  ADVENTURE = 'ADVENTURE', //12
+  FAMILY = 'FAMILY', //10751
+  HISTORY = 'HISTORY', //36
+  WAR = 'WAR', //10752
+  WESTERN = 'WESTERN', //37
+  MUSIC = 'MUSIC', //10402
 }

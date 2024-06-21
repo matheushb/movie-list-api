@@ -13,10 +13,6 @@ export class UserListRepository {
     });
   }
 
-  findAll() {
-    return this.prismaService.userList.findMany();
-  }
-
   findOne(userId: string, listId: string) {
     return this.prismaService.userList.findUnique({
       where: {

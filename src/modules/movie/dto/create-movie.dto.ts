@@ -10,7 +10,6 @@ import {
   Max,
   MaxLength,
   Min,
-  MinDate,
 } from 'class-validator';
 import { Genre, Language } from '../entities/movie.entity';
 
@@ -29,7 +28,6 @@ export class CreateMovieDto {
   overview: string;
 
   @IsDateString()
-  @MinDate(new Date(1896, 12, 28))
   @ApiProperty({ example: '1994-09-10' })
   releaseDate: Date;
 
@@ -42,20 +40,15 @@ export class CreateMovieDto {
   @ApiProperty({ example: Language.EN, enum: Language })
   language: Language;
 
-  @IsEnum(Genre)
-  @ApiProperty({ example: Genre.DRAMA, enum: Genre })
-  genre: Genre;
-
-  @IsInt()
-  @Min(1)
-  @ApiProperty({ example: 142 })
-  duration: number;
+  @IsEnum(Genre, { each: true })
+  @ApiProperty({ example: Genre.DRAMA, enum: Genre, isArray: true })
+  genre: Genre[];
 
   @IsOptional()
   @IsNumber()
   @Min(1)
   @Max(10)
-  @ApiProperty({ example: 9.3 })
+  @ApiProperty({ example: 6.9 })
   rating: number;
 
   @IsOptional()

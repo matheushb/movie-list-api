@@ -29,6 +29,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
+      console.log(exception);
+
+      if (exception.getResponse() instanceof Object) {
+        message =
+          exception.getResponse()['message'] ||
+          exception.getResponse()['error'];
+      } else {
+        message = exception.message;
+      }
     }
 
     if (exception instanceof PrismaClientKnownRequestError) {

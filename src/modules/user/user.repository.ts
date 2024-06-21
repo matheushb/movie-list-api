@@ -4,14 +4,12 @@ import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-const USER_SELECT_FIELDS: Prisma.UserSelect = {
+export const USER_SELECT_FIELDS: Prisma.UserSelect = {
   id: true,
   email: true,
   name: true,
   bio: true,
   birthDate: true,
-  preferredGenres: true,
-  preferredLanguages: true,
   createdAt: true,
   updatedAt: true,
 };

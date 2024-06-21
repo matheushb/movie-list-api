@@ -14,6 +14,11 @@ import { UpdateMovieListDto } from './dto/update-movie-list.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import {
+  ApiPagination,
+  Pagination,
+  PaginationParams,
+} from 'src/common/decorators/pagination.decorator';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -28,9 +33,10 @@ export class MovieListController {
     return this.movieListService.create(createMovieListDto);
   }
 
+  @ApiPagination()
   @Get()
-  findAll() {
-    return this.movieListService.findAll();
+  findAll(@Pagination() pagination: PaginationParams) {
+    return this.movieListService.findAll(pagination);
   }
 
   @Get('movie/:movieId/list/:listId')

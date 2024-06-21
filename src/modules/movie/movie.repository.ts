@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 
 @Injectable()
 export class MovieRepository {
@@ -11,10 +11,6 @@ export class MovieRepository {
     return this.prismaService.movie.create({
       data: createMovieDto,
     });
-  }
-
-  findAll() {
-    return this.prismaService.movie.findMany();
   }
 
   findOne(id: string) {

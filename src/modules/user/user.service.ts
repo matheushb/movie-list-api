@@ -1,15 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserRepository } from './user.repository';
+import { USER_SELECT_FIELDS, UserRepository } from './user.repository';
 import { BcryptService } from 'src/common/bcrypt/bcrypt.service';
 import { isDate } from 'class-validator';
+import { PaginationParams } from 'src/common/decorators/pagination.decorator';
+import { Paginator } from 'src/common/utils/pagination';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly bcryptService: BcryptService,
+    private readonly paginator: Paginator,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -24,8 +27,13 @@ export class UserService {
     return await this.userRepository.create(createUserDto);
   }
 
-  async findAll() {
-    return await this.userRepository.findAll();
+  async findAll(pagination: PaginationParams) {
+    return await this.paginator.paginate(
+      'user',
+      pagination.page,
+      pagination.pageSize,
+      USER_SELECT_FIELDS,
+    );
   }
 
   async findOne(id: string) {
@@ -42,6 +50,11 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
     return user;
+  }
+
+  async userExists(email: string) {
+    const user = await this.userRepository.findOneByEmail(email);
+    return !!user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

@@ -1,29 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserListRepository } from './user-list.repository';
 import { CreateUserListDto } from './dto/create-user-list.dto';
 import { UpdateUserListDto } from './dto/update-user-list.dto';
+import { Paginator } from 'src/common/utils/pagination';
+import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 
 @Injectable()
 export class UserListService {
-  constructor(private readonly userListRepository: UserListRepository) {}
+  constructor(
+    private readonly userListRepository: UserListRepository,
+    private readonly paginator: Paginator,
+  ) {}
 
-  create(createUserListDto: CreateUserListDto) {
+  async create(createUserListDto: CreateUserListDto) {
     return this.userListRepository.create(createUserListDto);
   }
 
-  findAll() {
-    return this.userListRepository.findAll();
+  async findAll(pagination: PaginationParams) {
+    return this.paginator.paginate(
+      'userList',
+      pagination.page,
+      pagination.pageSize,
+    );
   }
 
-  findOne(userId: string, listId: string) {
-    return this.userListRepository.findOne(userId, listId);
+  async findOne(userId: string, listId: string) {
+    const userList = await this.userListRepository.findOne(userId, listId);
+    if (!userList) {
+      throw new NotFoundException('User list not found');
+    }
+    return userList;
   }
 
-  update(userId: string, listId: string, updateUserListDto: UpdateUserListDto) {
+  async update(
+    userId: string,
+    listId: string,
+    updateUserListDto: UpdateUserListDto,
+  ) {
     return this.userListRepository.update(userId, listId, updateUserListDto);
   }
 
-  remove(userId: string, listId: string) {
+  async remove(userId: string, listId: string) {
     return this.userListRepository.remove(userId, listId);
   }
 }

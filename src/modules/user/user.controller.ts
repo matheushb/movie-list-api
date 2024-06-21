@@ -15,6 +15,11 @@ import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
 import { Public } from 'src/common/decorators/public.decorator';
+import {
+  ApiPagination,
+  Pagination,
+  PaginationParams,
+} from 'src/common/decorators/pagination.decorator';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -31,8 +36,9 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  @ApiPagination()
+  findAll(@Pagination() pagination: PaginationParams) {
+    return this.userService.findAll(pagination);
   }
 
   @Get(':id')

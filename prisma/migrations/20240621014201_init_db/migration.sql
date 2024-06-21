@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "Genre" AS ENUM ('ACTION', 'COMEDY', 'DRAMA', 'HORROR', 'ROMANCE', 'THRILLER', 'SCIFI', 'FANTASY', 'ANIMATION', 'DOCUMENTARY', 'CRIME', 'MYSTERY', 'ADVENTURE', 'FAMILY', 'HISTORY', 'WAR', 'WESTERN', 'MUSIC', 'SPORT', 'BIOGRAPHY');
+CREATE TYPE "Genre" AS ENUM ('ACTION', 'COMEDY', 'DRAMA', 'HORROR', 'ROMANCE', 'THRILLER', 'SCIFI', 'FANTASY', 'ANIMATION', 'DOCUMENTARY', 'CRIME', 'MYSTERY', 'ADVENTURE', 'FAMILY', 'HISTORY', 'WAR', 'WESTERN', 'MUSIC');
 
 -- CreateEnum
-CREATE TYPE "Language" AS ENUM ('EN', 'ES', 'FR', 'DE', 'IT', 'RU', 'PT', 'JA');
+CREATE TYPE "Language" AS ENUM ('EN', 'ES', 'FR', 'DE', 'IT', 'RU', 'PT', 'JA', 'KO');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -60,7 +60,7 @@ CREATE TABLE "Movie" (
     "releaseDate" TIMESTAMP(3) NOT NULL,
     "adult" BOOLEAN NOT NULL DEFAULT true,
     "language" "Language" NOT NULL,
-    "genre" "Genre" NOT NULL,
+    "genre" "Genre"[],
     "duration" INTEGER NOT NULL DEFAULT 0,
     "rating" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "ratingCount" INTEGER NOT NULL DEFAULT 0,

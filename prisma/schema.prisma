@@ -67,8 +67,7 @@ model Movie {
   releaseDate DateTime
   adult       Boolean    @default(true)
   language    Language
-  genre       Genre
-  duration    Int        @default(0)
+  genre       Genre[]   
   rating      Float      @default(0)
   ratingCount Int        @default(0)
   createdAt   DateTime   @default(now())
@@ -95,8 +94,6 @@ enum Genre {
   WAR
   WESTERN
   MUSIC
-  SPORT
-  BIOGRAPHY
 }
 
 enum Language {
@@ -108,4 +105,5 @@ enum Language {
   RU
   PT
   JA
+  KO
 }

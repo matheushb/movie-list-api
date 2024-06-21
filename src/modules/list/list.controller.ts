@@ -13,6 +13,11 @@ import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import {
+  ApiPagination,
+  Pagination,
+  PaginationParams,
+} from 'src/common/decorators/pagination.decorator';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -26,8 +31,9 @@ export class ListController {
   }
 
   @Get()
-  findAll() {
-    return this.listService.findAll();
+  @ApiPagination()
+  findAll(@Pagination() pagination: PaginationParams) {
+    return this.listService.findAll(pagination);
   }
 
   @Get(':id')
