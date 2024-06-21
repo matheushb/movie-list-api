@@ -6,12 +6,12 @@ import { HttpAdapterHost } from '@nestjs/core';
 export default function appConfig(app: INestApplication<any>) {
   app.useGlobalInterceptors(new LoggingInterceptor());
 
-  app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost))),
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
+  app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 }

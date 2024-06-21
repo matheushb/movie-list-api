@@ -2,26 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMovieListDto } from './dto/create-movie-list.dto';
 import { UpdateMovieListDto } from './dto/update-movie-list.dto';
 import { MovieListRepository } from './movie-list.repository';
-import { Paginator } from 'src/common/utils/pagination';
 import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 
 @Injectable()
 export class MovieListService {
-  constructor(
-    private readonly movieListRepository: MovieListRepository,
-    private readonly paginator: Paginator,
-  ) {}
+  constructor(private readonly movieListRepository: MovieListRepository) {}
 
   async create(createMovieListDto: CreateMovieListDto) {
-    return this.movieListRepository.create(createMovieListDto);
+    return await this.movieListRepository.create(createMovieListDto);
   }
 
   async findAll(pagination: PaginationParams) {
-    return this.paginator.paginate(
-      'movieList',
-      pagination.page,
-      pagination.pageSize,
-    );
+    return await this.movieListRepository.findAll(pagination);
   }
 
   async findOne(movieId: string, listId: string) {
@@ -37,10 +29,14 @@ export class MovieListService {
     listId: string,
     updateMovieListDto: UpdateMovieListDto,
   ) {
-    return this.movieListRepository.update(movieId, listId, updateMovieListDto);
+    return await this.movieListRepository.update(
+      movieId,
+      listId,
+      updateMovieListDto,
+    );
   }
 
   async remove(movieId: string, listId: string) {
-    return this.movieListRepository.remove(movieId, listId);
+    return await this.movieListRepository.remove(movieId, listId);
   }
 }

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { ListRepository } from './list.repository';
@@ -17,11 +21,7 @@ export class ListService {
   }
 
   async findAll(pagination: PaginationParams) {
-    return this.paginator.paginate(
-      'list',
-      pagination.page,
-      pagination.pageSize,
-    );
+    return this.listRepository.findAll(pagination);
   }
 
   async findOne(id: string) {
@@ -38,5 +38,20 @@ export class ListService {
 
   async remove(id: string) {
     return this.listRepository.remove(id);
+  }
+
+  async rate(id: string, rating: number) {
+    if (rating < 1 || rating > 10)
+      throw new BadRequestException('Rating must be between 1 and 10');
+
+    const list = await this.listRepository.findOne(id);
+
+    const newAvgRating =
+      (list.rating * list.ratingCount + rating) / (list.ratingCount + 1);
+
+    return await this.update(id, {
+      rating: newAvgRating,
+      ratingCount: list.ratingCount + 1,
+    });
   }
 }

@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { CreateMovieListDto } from './dto/create-movie-list.dto';
 import { UpdateMovieListDto } from './dto/update-movie-list.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { Paginator } from 'src/common/utils/pagination';
+import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 
 @Injectable()
 export class MovieListRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly paginator: Paginator,
+  ) {}
 
   create(createMovieListDto: CreateMovieListDto) {
     return this.prismaService.movieList.create({
@@ -13,8 +18,12 @@ export class MovieListRepository {
     });
   }
 
-  findAll() {
-    return this.prismaService.movieList.findMany();
+  findAll(pagination: PaginationParams) {
+    return this.paginator.paginate(
+      'movieList',
+      pagination.page,
+      pagination.pageSize,
+    );
   }
 
   findOne(movieId: string, listId: string) {

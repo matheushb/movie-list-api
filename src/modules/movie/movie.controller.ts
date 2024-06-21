@@ -1,24 +1,24 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
-import { MovieService } from './movie.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   ApiPagination,
   Pagination,
   PaginationParams,
 } from 'src/common/decorators/pagination.decorator';
+import { RateDto } from 'src/common/dtos/rate-dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
+import { MovieService } from './movie.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -31,6 +31,12 @@ export class MovieController {
   @ApiBody({ type: CreateMovieDto })
   create(@Body() createMovieDto: CreateMovieDto) {
     return this.movieService.create(createMovieDto);
+  }
+
+  @Post(':id/rate')
+  @ApiBody({ type: RateDto })
+  rate(@Param('id') id: string, @Body() rate: { rating: number }) {
+    return this.movieService.rate(id, rate.rating);
   }
 
   @Get()

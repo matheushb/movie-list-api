@@ -11,6 +11,19 @@ export class SeedService {
   ) {}
 
   async seed() {
+    const moviesToCreate = [];
+
+    for (let x = 1; x < 5; x++) {
+      moviesToCreate.push(...(await this.movieDbGateway.seed(x)));
+    }
+
+    for (const movie of moviesToCreate) {
+      const payload = this.createMoviePayload(movie);
+      await this.movieService.create(payload);
+    }
+  }
+
+  private createMoviePayload(movie: any) {
     const mappedGenres: Map<number, Genre> = new Map([
       [28, Genre.ACTION],
       [35, Genre.COMEDY],
@@ -43,25 +56,24 @@ export class SeedService {
       ['ko', Language.KO],
     ]);
 
-    const movies = await this.movieDbGateway.seed();
+    const getExistingGenres = (genreIds: number[]) => {
+      return genreIds.reduce((acc: Genre[], genreId: number) => {
+        const genre = mappedGenres.get(genreId);
+        if (genre) {
+          return [...acc, genre];
+        }
+      }, []);
+    };
 
-    console.log(movies);
-
-    for (const movie of movies) {
-      const payload = {
-        adult: movie.adult,
-        overview: movie.overview,
-        releaseDate: movie.release_date,
-        title: movie.title,
-        rating: movie.vote_average,
-        ratingCount: movie.vote_count,
-        genre: movie.genre_ids.map((genreId: number) =>
-          mappedGenres.get(genreId),
-        ),
-        language: mappedLanguage.get(movie.original_language),
-      };
-      console.log(payload);
-      await this.movieService.create(payload);
-    }
+    return {
+      adult: movie.adult,
+      overview: movie.overview,
+      releaseDate: movie.release_date,
+      title: movie.title,
+      rating: movie.vote_average,
+      ratingCount: movie.vote_count,
+      genre: getExistingGenres(movie.genre_ids),
+      language: mappedLanguage.get(movie.original_language) ?? Language.EN,
+    };
   }
 }

@@ -24,9 +24,9 @@ export class MovieDbGateway {
     });
   }
 
-  async seed() {
+  async seed(page: number = 1) {
     const response = await this.axios.get(
-      '/movie/popular?include_adult=true&language=pt-BR&page=1&sort_by=popularity.desc',
+      `/movie/popular?include_adult=true&language=pt-BR&page=${page}&sort_by=popularity.desc`,
     );
 
     return JSON.parse(response.data).results;

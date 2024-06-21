@@ -3,6 +3,8 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PaginationParams } from 'src/common/decorators/pagination.decorator';
+import { Paginator } from 'src/common/utils/pagination';
 
 export const USER_SELECT_FIELDS: Prisma.UserSelect = {
   id: true,
@@ -16,17 +18,14 @@ export const USER_SELECT_FIELDS: Prisma.UserSelect = {
 
 @Injectable()
 export class UserRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly paginator: Paginator,
+  ) {}
 
   create(createUserDto: CreateUserDto) {
     return this.prismaService.user.create({
       data: createUserDto,
-      select: USER_SELECT_FIELDS,
-    });
-  }
-
-  findAll() {
-    return this.prismaService.user.findMany({
       select: USER_SELECT_FIELDS,
     });
   }
@@ -36,6 +35,15 @@ export class UserRepository {
       where: { id },
       select: USER_SELECT_FIELDS,
     });
+  }
+
+  findAll(pagination: PaginationParams) {
+    return this.paginator.paginate(
+      'user',
+      pagination.page,
+      pagination.pageSize,
+      USER_SELECT_FIELDS,
+    );
   }
 
   findOneByEmail(email: string) {

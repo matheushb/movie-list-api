@@ -12,13 +12,13 @@ import {
 } from 'class-validator';
 
 export class CreateListDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Melhores filmes de Ação' })
   @IsString()
   @MaxLength(255)
   @MinLength(1)
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Lista de filmes de ação' })
   @IsString()
   @IsOptional()
   @MaxLength(255)
@@ -29,14 +29,14 @@ export class CreateListDto {
   @IsBoolean()
   isPublic: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ example: 9.4 })
   @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(10)
   rating: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 321 })
   @IsOptional()
   @IsInt()
   ratingCount: number;

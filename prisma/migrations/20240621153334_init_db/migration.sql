@@ -61,7 +61,6 @@ CREATE TABLE "Movie" (
     "adult" BOOLEAN NOT NULL DEFAULT true,
     "language" "Language" NOT NULL,
     "genre" "Genre"[],
-    "duration" INTEGER NOT NULL DEFAULT 0,
     "rating" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "ratingCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -3,6 +3,7 @@ import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Paginator } from 'src/common/utils/pagination';
+import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 
 @Injectable()
 export class ListRepository {
@@ -21,6 +22,10 @@ export class ListRepository {
     return this.prismaService.list.findUnique({
       where: { id },
     });
+  }
+
+  findAll(pagination: PaginationParams) {
+    return this.paginate.paginate('list', pagination.page, pagination.pageSize);
   }
 
   update(id: string, updateListDto: UpdateListDto) {

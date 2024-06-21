@@ -11,14 +11,16 @@ import {
 import { ListService } from './list.service';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
 import {
   ApiPagination,
   Pagination,
   PaginationParams,
 } from 'src/common/decorators/pagination.decorator';
+import { RateDto } from 'src/common/dtos/rate-dto';
 
+@ApiTags('list')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('list')
@@ -28,6 +30,12 @@ export class ListController {
   @Post()
   create(@Body() createListDto: CreateListDto) {
     return this.listService.create(createListDto);
+  }
+
+  @Post('rate/:id')
+  @ApiBody({ type: RateDto })
+  rate(@Param('id') id: string, @Body() rate: { rating: number }) {
+    return this.listService.rate(id, rate.rating);
   }
 
   @Get()
