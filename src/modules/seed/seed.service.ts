@@ -10,16 +10,18 @@ export class SeedService {
     private readonly movieService: MovieService,
   ) {}
 
+  //evitar promise.all pelo rate limit
   async seed() {
     const moviesToCreate = [];
-
-    for (let x = 1; x < 5; x++) {
+    for (let x = 1; x < 20; x++) {
       moviesToCreate.push(...(await this.movieDbGateway.seed(x)));
     }
 
     for (const movie of moviesToCreate) {
       const payload = this.createMoviePayload(movie);
-      await this.movieService.create(payload);
+      try {
+        await this.movieService.create(payload);
+      } catch (err) {}
     }
   }
 
