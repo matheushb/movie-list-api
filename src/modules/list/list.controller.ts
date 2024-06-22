@@ -19,6 +19,11 @@ import {
   PaginationParams,
 } from 'src/common/decorators/pagination.decorator';
 import { RateDto } from 'src/common/dtos/rate-dto';
+import {
+  HasListFilterQuery,
+  ListFilter,
+  ListFilterParams,
+} from 'src/common/decorators/list-filter-params.decorator';
 
 @ApiTags('list')
 @ApiBearerAuth()
@@ -33,15 +38,22 @@ export class ListController {
   }
 
   @Post('rate/:id')
-  @ApiBody({ type: RateDto })
+  @ApiBody({
+    type: RateDto,
+    description: 'Rota para avaliar movies, rating > 1 & rating < 0',
+  })
   rate(@Param('id') id: string, @Body() rate: { rating: number }) {
     return this.listService.rate(id, rate.rating);
   }
 
   @Get()
+  @HasListFilterQuery()
   @ApiPagination()
-  findAll(@Pagination() pagination: PaginationParams) {
-    return this.listService.findAll(pagination);
+  findAll(
+    @ListFilter() listFilterParams: ListFilterParams,
+    @Pagination() pagination: PaginationParams,
+  ) {
+    return this.listService.findAll(pagination, listFilterParams);
   }
 
   @Get(':id')
