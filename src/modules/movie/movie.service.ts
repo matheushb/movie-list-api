@@ -8,10 +8,17 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieRepository } from './movie.repository';
 import { isDate } from 'class-validator';
 import { PaginationParams } from 'src/common/decorators/pagination.decorator';
+import { MovieFilterParams } from 'src/common/decorators/movie-filter-params.decorator';
+import { Genre, Prisma } from '@prisma/client';
+import { JwtPayload } from '../auth/strategies/jwt.strategy';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class MovieService {
-  constructor(private readonly movieRepository: MovieRepository) {}
+  constructor(
+    private readonly movieRepository: MovieRepository,
+    private readonly userService: UserService,
+  ) {}
 
   async create(createMovieDto: CreateMovieDto) {
     if (createMovieDto.releaseDate && !isDate(createMovieDto.releaseDate)) {
@@ -20,8 +27,30 @@ export class MovieService {
     return await this.movieRepository.create(createMovieDto);
   }
 
-  async findAll(pagination: PaginationParams) {
-    return await this.movieRepository.findAll(pagination);
+  async findTopRated() {
+    return await this.movieRepository.findTopRated();
+  }
+
+  async getRecommendations(decodedPayload: JwtPayload) {
+    const user = await this.userService.findOne(decodedPayload.sub);
+
+    return await this.movieRepository.findAll(
+      { page: 1, pageSize: 10 },
+      {
+        genre: { hasSome: user.favoriteGenres },
+        language: { in: user.favoriteLanguages },
+        rating: { gte: 7 },
+      },
+    );
+  }
+
+  async findAll(
+    movieFilterParams: MovieFilterParams,
+    pagination: PaginationParams,
+  ) {
+    const query = this.parseFilters(movieFilterParams);
+
+    return await this.movieRepository.findAll(pagination, query);
   }
 
   async findOne(id: string) {
@@ -56,5 +85,69 @@ export class MovieService {
       rating: newAvgRating,
       ratingCount: movie.ratingCount + 1,
     });
+  }
+
+  private parseFilters(
+    movieFilterParams: MovieFilterParams,
+  ): Prisma.MovieWhereInput {
+    const queries: Prisma.MovieWhereInput[] = [];
+
+    if (movieFilterParams.ratingGte && movieFilterParams.ratingLte) {
+      if (
+        Number(movieFilterParams.ratingGte) >
+        Number(movieFilterParams.ratingLte)
+      ) {
+        throw new BadRequestException(
+          'ratingGte must be less than or equal to ratingLte',
+        );
+      }
+      queries.push({
+        rating: {
+          gte: Number(movieFilterParams.ratingGte),
+          lte: Number(movieFilterParams.ratingLte),
+        },
+      });
+    }
+
+    if (movieFilterParams.ratingGte && !movieFilterParams.ratingLte) {
+      queries.push({
+        rating: {
+          gte: Number(movieFilterParams.ratingGte),
+        },
+      });
+    }
+
+    if (!movieFilterParams.ratingGte && movieFilterParams.ratingLte) {
+      queries.push({
+        rating: {
+          lte: Number(movieFilterParams.ratingLte),
+        },
+      });
+    }
+
+    if (movieFilterParams.title) {
+      queries.push({
+        title: {
+          contains: movieFilterParams.title,
+          mode: 'insensitive',
+        },
+      });
+    }
+
+    if (movieFilterParams.genre && movieFilterParams.genre in Genre) {
+      queries.push({
+        genre: { has: movieFilterParams.genre as Genre },
+      });
+    }
+
+    if (movieFilterParams.adult) {
+      queries.push({
+        adult: movieFilterParams.adult === 'true',
+      });
+    }
+
+    return {
+      AND: queries,
+    };
   }
 }
