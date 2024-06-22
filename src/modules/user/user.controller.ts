@@ -8,18 +8,25 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserService } from './user.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
-import { Public } from 'src/common/decorators/public.decorator';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   ApiPagination,
   Pagination,
   PaginationParams,
 } from 'src/common/decorators/pagination.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
+import {
+  HasUserFilterQuery,
+  UserFilter,
+  UserFilterParams,
+} from 'src/common/decorators/user-filter-params.decorator';
+import { UserFromRequest } from 'src/common/decorators/user-from-request.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import { JwtPayload } from '../auth/strategies/jwt.strategy';
+import { GenreDto } from './dto/add-favorite-genre.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserService } from './user.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -35,10 +42,32 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Post('add-favorite-genre')
+  @ApiBody({ type: GenreDto })
+  addFavoriteGenre(
+    @Body() addFavouriteGenresDto: GenreDto,
+    @UserFromRequest() user: JwtPayload,
+  ) {
+    return this.userService.addFavoriteGenre(addFavouriteGenresDto, user);
+  }
+
+  @Post('remove-favorite-genre')
+  @ApiBody({ type: GenreDto })
+  removeFavoriteGenre(
+    @Body() addFavouriteGenresDto: GenreDto,
+    @UserFromRequest() user: JwtPayload,
+  ) {
+    return this.userService.removeFavoriteGenre(addFavouriteGenresDto, user);
+  }
+
   @Get()
   @ApiPagination()
-  findAll(@Pagination() pagination: PaginationParams) {
-    return this.userService.findAll(pagination);
+  @HasUserFilterQuery()
+  findAll(
+    @UserFilter() userFilterParams: UserFilterParams,
+    @Pagination() pagination: PaginationParams,
+  ) {
+    return this.userService.findAll(pagination, userFilterParams);
   }
 
   @Get(':id')
