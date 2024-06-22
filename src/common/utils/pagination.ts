@@ -10,15 +10,18 @@ export class Paginator {
     page: number = 1,
     pageSize: number = 10,
     select_fields?: object,
+    query?: object,
   ) {
     const skip = (page - 1) * pageSize;
+
     const [items, totalCount] = await this.prisma.$transaction([
       this.prisma[model].findMany({
         skip,
         take: pageSize,
         select: select_fields,
+        where: query,
       }),
-      this.prisma[model].count(),
+      this.prisma[model].count({ where: query }),
     ]);
 
     return {

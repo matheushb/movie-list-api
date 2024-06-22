@@ -19,6 +19,13 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieService } from './movie.service';
+import {
+  HasMovieFilterQuery,
+  MovieFilter,
+  MovieFilterParams,
+} from 'src/common/decorators/movie-filter-params.decorator';
+import { UserFromRequest } from 'src/common/decorators/user-from-request.decorator';
+import { JwtPayload } from '../auth/strategies/jwt.strategy';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -33,16 +40,33 @@ export class MovieController {
     return this.movieService.create(createMovieDto);
   }
 
+  @Get('top-rated')
+  getTopRated() {
+    return this.movieService.findTopRated();
+  }
+
   @Post(':id/rate')
-  @ApiBody({ type: RateDto })
+  @ApiBody({
+    type: RateDto,
+    description: 'Rota para avaliar movies, rating > 1 & rating < 0',
+  })
   rate(@Param('id') id: string, @Body() rate: { rating: number }) {
     return this.movieService.rate(id, rate.rating);
   }
 
+  @Get('recommendations')
+  getRecommendations(@UserFromRequest() user: JwtPayload) {
+    return this.movieService.getRecommendations(user);
+  }
+
   @Get()
+  @HasMovieFilterQuery()
   @ApiPagination()
-  findAll(@Pagination() pagination: PaginationParams) {
-    return this.movieService.findAll(pagination);
+  findAll(
+    @MovieFilter() movieFilterParams: MovieFilterParams,
+    @Pagination() pagination: PaginationParams,
+  ) {
+    return this.movieService.findAll(movieFilterParams, pagination);
   }
 
   @Get(':id')

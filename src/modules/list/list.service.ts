@@ -8,6 +8,8 @@ import { UpdateListDto } from './dto/update-list.dto';
 import { ListRepository } from './list.repository';
 import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 import { Paginator } from 'src/common/utils/pagination';
+import { ListFilterParams } from 'src/common/decorators/list-filter-params.decorator';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ListService {
@@ -20,8 +22,13 @@ export class ListService {
     return this.listRepository.create(createListDto);
   }
 
-  async findAll(pagination: PaginationParams) {
-    return this.listRepository.findAll(pagination);
+  async findAll(
+    pagination: PaginationParams,
+    listFilterParams: ListFilterParams,
+  ) {
+    const query = this.parseFilters(listFilterParams);
+
+    return this.listRepository.findAll(pagination, query);
   }
 
   async findOne(id: string) {
@@ -53,5 +60,61 @@ export class ListService {
       rating: newAvgRating,
       ratingCount: list.ratingCount + 1,
     });
+  }
+
+  private parseFilters(
+    movieFilterParams: ListFilterParams,
+  ): Prisma.ListWhereInput {
+    const queries: Prisma.ListWhereInput[] = [];
+
+    queries.push({
+      isPublic: true,
+    });
+
+    if (movieFilterParams.ratingGte && movieFilterParams.ratingLte) {
+      if (
+        Number(movieFilterParams.ratingGte) >
+        Number(movieFilterParams.ratingLte)
+      ) {
+        throw new BadRequestException(
+          'ratingGte must be less than or equal to ratingLte',
+        );
+      }
+      queries.push({
+        rating: {
+          gte: Number(movieFilterParams.ratingGte),
+          lte: Number(movieFilterParams.ratingLte),
+        },
+      });
+    }
+
+    if (movieFilterParams.ratingGte && !movieFilterParams.ratingLte) {
+      queries.push({
+        rating: {
+          gte: Number(movieFilterParams.ratingGte),
+        },
+      });
+    }
+
+    if (!movieFilterParams.ratingGte && movieFilterParams.ratingLte) {
+      queries.push({
+        rating: {
+          lte: Number(movieFilterParams.ratingLte),
+        },
+      });
+    }
+
+    if (movieFilterParams.title) {
+      queries.push({
+        title: {
+          contains: movieFilterParams.title,
+          mode: 'insensitive',
+        },
+      });
+    }
+
+    return {
+      AND: queries,
+    };
   }
 }

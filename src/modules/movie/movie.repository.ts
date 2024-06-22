@@ -4,6 +4,7 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 import { Paginator } from 'src/common/utils/pagination';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MovieRepository {
@@ -15,6 +16,15 @@ export class MovieRepository {
   create(createMovieDto: CreateMovieDto) {
     return this.prismaService.movie.create({
       data: createMovieDto,
+    });
+  }
+
+  findTopRated() {
+    return this.prismaService.movie.findMany({
+      orderBy: {
+        rating: 'desc',
+      },
+      take: 10,
     });
   }
 
@@ -31,11 +41,13 @@ export class MovieRepository {
     });
   }
 
-  findAll(pagination: PaginationParams) {
+  findAll(pagination: PaginationParams, query: Prisma.MovieWhereInput) {
     return this.paginator.paginate(
       'movie',
       pagination.page,
       pagination.pageSize,
+      null,
+      query,
     );
   }
 

@@ -4,6 +4,7 @@ import { UpdateListDto } from './dto/update-list.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { Paginator } from 'src/common/utils/pagination';
 import { PaginationParams } from 'src/common/decorators/pagination.decorator';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ListRepository {
@@ -24,8 +25,14 @@ export class ListRepository {
     });
   }
 
-  findAll(pagination: PaginationParams) {
-    return this.paginate.paginate('list', pagination.page, pagination.pageSize);
+  findAll(pagination: PaginationParams, query: Prisma.ListWhereInput) {
+    return this.paginate.paginate(
+      'list',
+      pagination.page,
+      pagination.pageSize,
+      null,
+      query,
+    );
   }
 
   update(id: string, updateListDto: UpdateListDto) {

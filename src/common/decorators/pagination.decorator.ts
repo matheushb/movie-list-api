@@ -13,8 +13,8 @@ export const Pagination = createParamDecorator(
 
 export function ApiPagination() {
   return applyDecorators(
-    ApiQuery({ name: 'page', required: false, type: Number, example: 1 }),
-    ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 }),
+    ApiQuery({ name: 'page', required: false, type: Number }),
+    ApiQuery({ name: 'pageSize', required: false, type: Number }),
   );
 }
 
