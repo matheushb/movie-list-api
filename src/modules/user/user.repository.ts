@@ -11,6 +11,8 @@ export const USER_SELECT_FIELDS: Prisma.UserSelect = {
   email: true,
   name: true,
   bio: true,
+  favoriteGenres: true,
+  favoriteLanguages: true,
   birthDate: true,
   createdAt: true,
   updatedAt: true,
@@ -37,12 +39,13 @@ export class UserRepository {
     });
   }
 
-  findAll(pagination: PaginationParams) {
+  findAll(pagination: PaginationParams, query: Prisma.UserWhereInput) {
     return this.paginator.paginate(
       'user',
       pagination.page,
       pagination.pageSize,
       USER_SELECT_FIELDS,
+      query,
     );
   }
 

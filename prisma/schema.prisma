@@ -14,26 +14,28 @@ datasource db {
 }
 
 model User {
-  id                 String     @id @default(cuid())
-  email              String     @unique
-  name               String?
-  password           String
-  bio                String?
-  birthDate          DateTime?
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
-  UserList           UserList[]
+  id                String     @id @default(cuid())
+  email             String     @unique
+  name              String?
+  favoriteGenres    Genre[]
+  favoriteLanguages Language[]
+  password          String
+  bio               String?
+  birthDate         DateTime?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  UserList          UserList[]
 }
 
 model List {
-  id          String     @id @default(cuid())
+  id          String      @id @default(cuid())
   title       String
   description String?
-  isPublic    Boolean    @default(false)
-  rating      Float      @default(0)
-  ratingCount Int        @default(0)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  isPublic    Boolean     @default(false)
+  rating      Float       @default(0)
+  ratingCount Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   items       MovieList[]
   UserList    UserList[]
 }
@@ -61,17 +63,17 @@ model MovieList {
 }
 
 model Movie {
-  id          String     @id @default(cuid())
-  title       String
+  id          String      @id @default(cuid())
+  title       String      @unique
   overview    String
   releaseDate DateTime
-  adult       Boolean    @default(true)
+  adult       Boolean     @default(true)
   language    Language
-  genre       Genre[]   
-  rating      Float      @default(0)
-  ratingCount Int        @default(0)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  genre       Genre[]
+  rating      Float       @default(0)
+  ratingCount Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   listItems   MovieList[]
 }
 

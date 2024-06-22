@@ -9,6 +9,8 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
+    "favoriteGenres" "Genre"[],
+    "favoriteLanguages" "Language"[],
     "password" TEXT NOT NULL,
     "bio" TEXT,
     "birthDate" TIMESTAMP(3),
@@ -71,6 +73,9 @@ CREATE TABLE "Movie" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Movie_title_key" ON "Movie"("title");
 
 -- AddForeignKey
 ALTER TABLE "UserList" ADD CONSTRAINT "UserList_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
