@@ -13,9 +13,9 @@ cd movie-list-api
 ---
 
 ## Sumário
-1. [Configuração](#clonando-a-aplicação)
-2. [Inicialização](#iniciando-a-aplicação)
-3. [Entidades]()
+1. [Configuração](#configurando-a-aplicação)
+2. [Inicialização](#inicializando-a-aplicação)
+3. [Entidades](#entidades)
 4. [Seed](#seedando-a-aplicação)
 5. [Swagger](#swagger)
 6. [Ajuda](#ajuda)
@@ -37,7 +37,7 @@ docker-compose up -d
 npx prisma migrate dev
 ```
 ---
-## Rodando a aplicação:
+## Inicializando a aplicação:
 
 Inicializando normalmente: 
 ```bash
@@ -91,7 +91,7 @@ GET /api
 
 ### List
 
-[List](#list) - Representa uma **lista de filmes** que podem ser criadas pelos usuários. As listas podem ser **públicas ou privadas** e **permitem avaliações** por parte dos usuários.
+[List](#list) - Representa uma **lista de filmes** que podem ser **criadas pelos usuários**. As **listas** podem ser **públicas ou privadas** e **permitem avaliações** por parte dos **usuários**.
 
 [Movie](#movie) - Representa um **filme**, contendo informações como título, sinopse, data de lançamento, idioma, gêneros e classificação. Os filmes podem ser **avaliados** e são **associados a listas de filmes**.
 
