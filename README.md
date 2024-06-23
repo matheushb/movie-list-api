@@ -3,7 +3,7 @@
 - [Docker](https://www.docker.com/get-started)
 - [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
-- **TMDB Bearer Token** para seedar
+- [TMDB](https://developer.themoviedb.org/docs/getting-started) Token para seedar
 
 ## Clonando o Repositório:
 ```bash
