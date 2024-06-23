@@ -1,20 +1,23 @@
+import { BcryptService } from '@/common/bcrypt/bcrypt.service';
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
+import { UserFilterParams } from '@/common/decorators/user-filter-params.decorator';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Prisma } from '@prisma/client';
 import { isDate } from 'class-validator';
-import { BcryptService } from 'src/common/bcrypt/bcrypt.service';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
+import { JwtPayload } from '../auth/strategies/jwt.strategy';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GenreDto } from './dto/genre.dto';
+import { LanguageDto } from './dto/language.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
-import { UserFilterParams } from 'src/common/decorators/user-filter-params.decorator';
-import { Prisma } from '@prisma/client';
-import { JwtPayload } from '../auth/strategies/jwt.strategy';
-import { GenreDto } from './dto/add-favorite-genre.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly bcryptService: BcryptService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -26,13 +29,16 @@ export class UserService {
       createUserDto.password,
     );
 
-    return await this.userRepository.create(createUserDto);
+    const user = await this.userRepository.create(createUserDto);
+
+    return {
+      ...user,
+      access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
+    };
   }
 
   async addFavoriteGenre(addFavoriteGenreDto: GenreDto, user: JwtPayload) {
     const foundUser = await this.userRepository.findOne(user.sub);
-
-    console.log('user > ', foundUser.favoriteGenres);
 
     for (const genre of foundUser.favoriteGenres) {
       if (!addFavoriteGenreDto.genre.includes(genre as any)) {
@@ -57,6 +63,39 @@ export class UserService {
 
     return await this.userRepository.update(user.sub, {
       favoriteGenres: newGenres as any,
+    });
+  }
+
+  async addFavoriteLanguage(
+    addFavoriteLanguageDto: LanguageDto,
+    user: JwtPayload,
+  ) {
+    const foundUser = await this.userRepository.findOne(user.sub);
+
+    for (const language of foundUser.favoriteLanguages) {
+      if (!addFavoriteLanguageDto.language.includes(language as any)) {
+        addFavoriteLanguageDto.language.push(language as any);
+      }
+    }
+
+    return await this.userRepository.update(user.sub, {
+      favoriteLanguages: addFavoriteLanguageDto.language,
+    });
+  }
+
+  async removeFavoriteLanguage(
+    removeFavoriteLanguageDto: LanguageDto,
+    user: JwtPayload,
+  ) {
+    const foundUser = await this.userRepository.findOne(user.sub);
+
+    const newLanguages = foundUser.favoriteLanguages.filter(
+      (language) =>
+        !removeFavoriteLanguageDto.language.includes(language as any),
+    );
+
+    return await this.userRepository.update(user.sub, {
+      favoriteLanguages: newLanguages as any,
     });
   }
 

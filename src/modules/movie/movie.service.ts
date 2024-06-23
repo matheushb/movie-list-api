@@ -1,17 +1,17 @@
+import { MovieFilterParams } from '@/common/decorators/movie-filter-params.decorator';
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Genre, Prisma } from '@prisma/client';
+import { isDate } from 'class-validator';
+import { JwtPayload } from '../auth/strategies/jwt.strategy';
+import { UserService } from '../user/user.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieRepository } from './movie.repository';
-import { isDate } from 'class-validator';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
-import { MovieFilterParams } from 'src/common/decorators/movie-filter-params.decorator';
-import { Genre, Prisma } from '@prisma/client';
-import { JwtPayload } from '../auth/strategies/jwt.strategy';
-import { UserService } from '../user/user.service';
 
 @Injectable()
 export class MovieService {

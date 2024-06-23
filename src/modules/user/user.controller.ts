@@ -1,30 +1,33 @@
 import {
+  ApiPagination,
+  Pagination,
+  PaginationParams,
+} from '@/common/decorators/pagination.decorator';
+import { Public } from '@/common/decorators/public.decorator';
+import {
+  HasUserFilterQuery,
+  UserFilter,
+  UserFilterParams,
+} from '@/common/decorators/user-filter-params.decorator';
+import { UserFromRequest } from '@/common/decorators/user-from-request.decorator';
+import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import {
-  ApiPagination,
-  Pagination,
-  PaginationParams,
-} from 'src/common/decorators/pagination.decorator';
-import { Public } from 'src/common/decorators/public.decorator';
-import {
-  HasUserFilterQuery,
-  UserFilter,
-  UserFilterParams,
-} from 'src/common/decorators/user-filter-params.decorator';
-import { UserFromRequest } from 'src/common/decorators/user-from-request.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
 import { JwtPayload } from '../auth/strategies/jwt.strategy';
-import { GenreDto } from './dto/add-favorite-genre.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GenreDto } from './dto/genre.dto';
+import { LanguageDto } from './dto/language.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
@@ -42,6 +45,7 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('add-favorite-genre')
   @ApiBody({ type: GenreDto })
   addFavoriteGenre(
@@ -51,13 +55,37 @@ export class UserController {
     return this.userService.addFavoriteGenre(addFavouriteGenresDto, user);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('remove-favorite-genre')
   @ApiBody({ type: GenreDto })
   removeFavoriteGenre(
-    @Body() addFavouriteGenresDto: GenreDto,
+    @Body() removeFavouriteGenresDto: GenreDto,
     @UserFromRequest() user: JwtPayload,
   ) {
-    return this.userService.removeFavoriteGenre(addFavouriteGenresDto, user);
+    return this.userService.removeFavoriteGenre(removeFavouriteGenresDto, user);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('add-favorite-language')
+  @ApiBody({ type: LanguageDto })
+  addFavoriteLanguage(
+    @Body() addFavouriteLanguageDto: LanguageDto,
+    @UserFromRequest() user: JwtPayload,
+  ) {
+    return this.userService.addFavoriteLanguage(addFavouriteLanguageDto, user);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('remove-favorite-language')
+  @ApiBody({ type: LanguageDto })
+  removeFavoriteLanguage(
+    @Body() removeFavouriteLanguageDto: LanguageDto,
+    @UserFromRequest() user: JwtPayload,
+  ) {
+    return this.userService.removeFavoriteLanguage(
+      removeFavouriteLanguageDto,
+      user,
+    );
   }
 
   @Get()

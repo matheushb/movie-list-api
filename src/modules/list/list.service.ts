@@ -1,15 +1,15 @@
+import { ListFilterParams } from '@/common/decorators/list-filter-params.decorator';
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
+import { Paginator } from '@/common/utils/pagination';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { ListRepository } from './list.repository';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
-import { Paginator } from 'src/common/utils/pagination';
-import { ListFilterParams } from 'src/common/decorators/list-filter-params.decorator';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ListService {
@@ -51,7 +51,7 @@ export class ListService {
     if (rating < 1 || rating > 10)
       throw new BadRequestException('Rating must be between 1 and 10');
 
-    const list = await this.listRepository.findOne(id);
+    const list = await this.findOne(id);
 
     const newAvgRating =
       (list.rating * list.ratingCount + rating) / (list.ratingCount + 1);

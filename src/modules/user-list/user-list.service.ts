@@ -1,9 +1,9 @@
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
+import { Paginator } from '@/common/utils/pagination';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UserListRepository } from './user-list.repository';
 import { CreateUserListDto } from './dto/create-user-list.dto';
 import { UpdateUserListDto } from './dto/update-user-list.dto';
-import { Paginator } from 'src/common/utils/pagination';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
+import { UserListRepository } from './user-list.repository';
 
 @Injectable()
 export class UserListService {

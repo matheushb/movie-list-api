@@ -1,24 +1,23 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
-import { MovieListService } from './movie-list.service';
-import { CreateMovieListDto } from './dto/create-movie-list.dto';
-import { UpdateMovieListDto } from './dto/update-movie-list.dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
-import {
   ApiPagination,
   Pagination,
   PaginationParams,
-} from 'src/common/decorators/pagination.decorator';
+} from '@/common/decorators/pagination.decorator';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import { CreateMovieListDto } from './dto/create-movie-list.dto';
+import { UpdateMovieListDto } from './dto/update-movie-list.dto';
+import { MovieListService } from './movie-list.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)

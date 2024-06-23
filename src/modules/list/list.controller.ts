@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { CreateListDto } from './dto/create-list.dto';
@@ -17,13 +19,13 @@ import {
   ApiPagination,
   Pagination,
   PaginationParams,
-} from 'src/common/decorators/pagination.decorator';
-import { RateDto } from 'src/common/dtos/rate-dto';
+} from '@/common/decorators/pagination.decorator';
+import { RateDto } from '@/common/dtos/rate-dto';
 import {
   HasListFilterQuery,
   ListFilter,
   ListFilterParams,
-} from 'src/common/decorators/list-filter-params.decorator';
+} from '@/common/decorators/list-filter-params.decorator';
 
 @ApiTags('list')
 @ApiBearerAuth()
@@ -38,6 +40,7 @@ export class ListController {
   }
 
   @Post('rate/:id')
+  @HttpCode(HttpStatus.OK)
   @ApiBody({
     type: RateDto,
     description: 'Rota para avaliar movies, rating > 1 & rating < 0',

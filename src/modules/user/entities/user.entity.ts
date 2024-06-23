@@ -1,5 +1,5 @@
+import { Genre, Language } from '@/modules/movie/entities/movie.entity';
 import { UserList } from '@prisma/client';
-import { Genre, Language } from 'src/modules/movie/entities/movie.entity';
 
 export class User {
   id: string;

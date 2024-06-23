@@ -1,10 +1,10 @@
+import { Genre } from '@/modules/movie/entities/movie.entity';
 import {
   applyDecorators,
   createParamDecorator,
   ExecutionContext,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { Genre } from 'src/modules/movie/entities/movie.entity';
 
 export type MovieFilterParams = {
   title: string;

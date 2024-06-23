@@ -1,10 +1,10 @@
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { Paginator } from '@/common/utils/pagination';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/common/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
-import { Paginator } from 'src/common/utils/pagination';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MovieRepository {

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { Paginator } from 'src/common/utils/pagination';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { Paginator } from '@/common/utils/pagination';
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
 import { Prisma } from '@prisma/client';
 
 @Injectable()

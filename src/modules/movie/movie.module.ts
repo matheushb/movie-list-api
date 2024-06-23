@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
 import { MovieRepository } from './movie.repository';
-import { Paginator } from 'src/common/utils/pagination';
 import { UserModule } from '../user/user.module';
+import { Paginator } from '@/common/utils/pagination';
 
 @Module({
   imports: [UserModule],

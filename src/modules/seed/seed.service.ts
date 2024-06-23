@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MovieDbGateway } from 'src/gateways/moviedb/moviedb.gateway';
+import { MovieDbGateway } from '@/gateways/moviedb/moviedb.gateway';
 import { MovieService } from '../movie/movie.service';
 import { Genre, Language } from '../movie/entities/movie.entity';
 

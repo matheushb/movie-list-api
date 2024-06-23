@@ -1,8 +1,8 @@
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMovieListDto } from './dto/create-movie-list.dto';
 import { UpdateMovieListDto } from './dto/update-movie-list.dto';
 import { MovieListRepository } from './movie-list.repository';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 
 @Injectable()
 export class MovieListService {

@@ -1,9 +1,9 @@
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { Paginator } from '@/common/utils/pagination';
 import { Injectable } from '@nestjs/common';
 import { CreateMovieListDto } from './dto/create-movie-list.dto';
 import { UpdateMovieListDto } from './dto/update-movie-list.dto';
-import { PrismaService } from 'src/common/prisma/prisma.service';
-import { Paginator } from 'src/common/utils/pagination';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
 
 @Injectable()
 export class MovieListRepository {

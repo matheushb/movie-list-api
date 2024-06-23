@@ -1,3 +1,4 @@
+import { Genre, Language } from '@/modules/movie/entities/movie.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
@@ -8,7 +9,6 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Genre, Language } from 'src/modules/movie/entities/movie.entity';
 
 export class CreateUserDto {
   @IsEmail()

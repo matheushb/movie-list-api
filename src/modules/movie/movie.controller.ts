@@ -1,4 +1,16 @@
 import {
+  HasMovieFilterQuery,
+  MovieFilter,
+  MovieFilterParams,
+} from '@/common/decorators/movie-filter-params.decorator';
+import {
+  ApiPagination,
+  Pagination,
+  PaginationParams,
+} from '@/common/decorators/pagination.decorator';
+import { UserFromRequest } from '@/common/decorators/user-from-request.decorator';
+import { RateDto } from '@/common/dtos/rate-dto';
+import {
   Body,
   Controller,
   Delete,
@@ -9,23 +21,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import {
-  ApiPagination,
-  Pagination,
-  PaginationParams,
-} from 'src/common/decorators/pagination.decorator';
-import { RateDto } from 'src/common/dtos/rate-dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import { JwtPayload } from '../auth/strategies/jwt.strategy';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieService } from './movie.service';
-import {
-  HasMovieFilterQuery,
-  MovieFilter,
-  MovieFilterParams,
-} from 'src/common/decorators/movie-filter-params.decorator';
-import { UserFromRequest } from 'src/common/decorators/user-from-request.decorator';
-import { JwtPayload } from '../auth/strategies/jwt.strategy';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)

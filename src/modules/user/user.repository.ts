@@ -1,10 +1,10 @@
+import { PaginationParams } from '@/common/decorators/pagination.decorator';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { Paginator } from '@/common/utils/pagination';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PaginationParams } from 'src/common/decorators/pagination.decorator';
-import { Paginator } from 'src/common/utils/pagination';
 
 export const USER_SELECT_FIELDS: Prisma.UserSelect = {
   id: true,

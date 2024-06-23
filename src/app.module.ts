@@ -7,6 +7,7 @@ import { MovieListModule } from './modules/movie-list/movie-list.module';
 import { UserListModule } from './modules/user-list/user-list.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SeedModule } from './modules/seed/seed.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { SeedModule } from './modules/seed/seed.module';
     PrismaModule,
     SeedModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
