@@ -1,10 +1,15 @@
-como iniciar o projeto:
 
-- git clone https://github.com/matheushb/movie-list-api.git
-- cd movie-list-api
-- npm i
-- docker-compose up -d
-- npx prisma migrate dev
+## prerequisitos
+- Docker
+- TMDB Bearer Token
+
+## como iniciar o projeto:
+- Copie o conteúdo da ".env.example" para uma ".env", insira a chave do tmb
+- `git clone https://github.com/matheushb/movie-list-api.git`
+- `cd movie-list-api`
+- `npm i`
+- `docker-compose up -d`
+- `npx prisma migrate dev`
 
 iniciar aplicação:
 - npm run start
