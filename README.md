@@ -81,16 +81,6 @@ GET /api
 ---
 ## Entidades
 
-[List](#list)
-[Movie](#movie)
-[MovieList](#movie-list)
-[User](#user)
-[UserList](#user-list)
-
----
-
-### List
-
 [List](#list) - Representa uma **lista de filmes** que podem ser **criadas pelos usuários**. As **listas** podem ser **públicas ou privadas** e **permitem avaliações** por parte dos **usuários**.
 
 [Movie](#movie) - Representa um **filme**, contendo informações como título, sinopse, data de lançamento, idioma, gêneros e classificação. Os filmes podem ser **avaliados** e são **associados a listas de filmes**.
@@ -103,11 +93,21 @@ GET /api
 
 ---
 
+### List
+**POST /list**: Cria uma nova lista.  
+**POST /list/rate/:id**: Avalia uma lista com uma nota entre 1 e 10.  
+**GET /list**: Retorna todas as listas com filtros e paginação.  
+**GET /list/:id**: Retorna uma lista específica pelo ID.  
+**PATCH /list/:id**: Atualiza uma lista pelo ID.  
+**DELETE /list/:id**: Remove uma lista pelo ID.
+
+---
+
 ### Movie
 
 **POST /movie**: Cria um novo filme.  
-**GET /movie/top-rated**: Retorna os 10 filmes melhor avaliados.  
 **GET /movie**: Retorna todos os filmes com filtros e paginação.  
+**GET /movie/top-rated**: Retorna os 10 filmes melhor avaliados.  
 **GET /movie/:id**: Retorna um filme específico pelo ID.  
 **GET /movie/recommendations**: Retorna recomendações de filmes, baseadas no  usuário autenticado.  
 **POST /movie/:id/rate**: Avalia um filme com uma nota entre 1 e 10.  
